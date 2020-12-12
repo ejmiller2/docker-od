@@ -1,0 +1,29 @@
+# For user with MegaDetector
+# https://github.com/microsoft/CameraTraps/blob/master/megadetector.md
+
+FROM tensorflow/serving
+
+# Define metadata
+LABEL version="1.0"
+LABEL description="Deploy tensorflow object detection model by url"
+
+# install wget
+RUN apt-get update
+RUN apt-get install -qy wget
+RUN apt-get install zip unzip -qy
+
+# Create variable. Use it with docker build --build-arg model_url=...
+ARG model_url
+
+# Download model
+WORKDIR /models
+RUN wget -nv -O model.zip $model_url
+RUN unzip model.zip
+RUN mkdir -p object-detect/1
+#RUN find -name saved_model -exec mv {}/saved_model.pb {}/variables object-detect/1/ \;
+RUN mv saved_model_megadetector_v3_tf19/1/megadetector_v3_tf19_saved_model.pb object-detect/1/saved_model.pb
+RUN mv saved_model_megadetector_v3_tf19/1/variables object-detect/1/
+
+EXPOSE 8080
+ENTRYPOINT ["tensorflow_model_server", "--model_base_path=/models/object-detect"]
+CMD ["--rest_api_port=8080","--port=8081","--rest_api_timeout_in_ms=600000"]
