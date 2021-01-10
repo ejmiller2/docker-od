@@ -23,10 +23,13 @@ Command line to build (<MODEL_URL> from above, <TAG_NAME> of your choosing):
   docker build -t <TAG_NAME> --build-arg model_url=<MODEL_URL> .
 Example:
   docker build -t tf-frcnn --build-arg model_url=http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_resnet_v2_atrous_coco_2018_01_28.tar.gz .
-  
+
+*** For models from TensorFlow Model Zoo using GPU ***
+
 To run this with GPU support, use Dockerfile.gpu. Make sure you have 
-Nvidia support enabled in Docker. This example uses nvidia-docker2
-(see [instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)).
+Nvidia support enabled in Docker. This example uses nvidia-docker2,
+see instructions:
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker
 It was tested with CUDA 9.0 and tensorflow/serving:1.12.0-gpu. For 
 later CUDA support, try a newer version of tensorflow/serving, or 
 use the latest (tensorflow/serving:latest-gpu).
